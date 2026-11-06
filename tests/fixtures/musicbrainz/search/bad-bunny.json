@@ -1,0 +1,18 @@
+{
+ "artists": [
+  {
+   "id": "89aa5ecb-59ad-46f5-b3eb-2d424e941f19",
+   "name": "Bad Bunny",
+   "type": "Person",
+   "country": "PR",
+   "area": {
+    "name": "Puerto Rico"
+   },
+   "life-span": {
+    "begin": "1994-03-10"
+   },
+   "disambiguation": "",
+   "score": 100
+  }
+ ]
+}

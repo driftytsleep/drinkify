@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block header %}{% endblock %}
+{% block content %}
+<h1 class="logo">drinkify</h1>
+<p class="tagline">music to drink to.</p>
+
+<form action="{{ url_for('drinkify.index') }}" method="get" class="search">
+<label for="artist">enter an artist:</label><br>
+<input type="text" id="artist" name="artist" autocomplete="off" autofocus required maxlength="200">
+<button type="submit">drinkify</button>
+</form>
+
+{% if recent %}
+<h2>recently drinkified</h2>
+<ul class="plain">
+{% for r in recent %}
+<li><a href="{{ url_for('drinkify.artist', mbid=r.mbid) }}">{{ r.artist_name }}</a> &rarr; {{ r.drink_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

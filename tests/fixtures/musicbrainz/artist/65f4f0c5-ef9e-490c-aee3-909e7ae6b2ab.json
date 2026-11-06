@@ -1,0 +1,57 @@
+{
+ "id": "65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab",
+ "name": "Metallica",
+ "type": "Group",
+ "country": "US",
+ "area": {
+  "name": "United States"
+ },
+ "life-span": {
+  "begin": "1981-10-28"
+ },
+ "disambiguation": "",
+ "genres": [
+  {
+   "name": "thrash metal",
+   "count": 20
+  },
+  {
+   "name": "heavy metal",
+   "count": 14
+  },
+  {
+   "name": "hard rock",
+   "count": 4
+  }
+ ],
+ "tags": [
+  {
+   "name": "thrash metal",
+   "count": 20
+  },
+  {
+   "name": "heavy metal",
+   "count": 14
+  },
+  {
+   "name": "hard rock",
+   "count": 4
+  },
+  {
+   "name": "metal",
+   "count": 9
+  },
+  {
+   "name": "speed metal",
+   "count": 3
+  },
+  {
+   "name": "seen live",
+   "count": 2
+  },
+  {
+   "name": "american",
+   "count": 2
+  }
+ ]
+}

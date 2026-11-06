@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ p.artist.name }} | drinkify{% endblock %}
+{% block description %}the drink for {{ p.artist.name }}: {{ p.drink.name }}.{% endblock %}
+{% block content %}
+<p class="for">for</p>
+<h1 class="artist">{{ p.artist.name }}</h1>
+{% if p.artist.disambiguation %}<p class="small">({{ p.artist.disambiguation }})</p>{% endif %}
+
+<p class="for">drink:</p>
+<h2 class="drink"><a href="{{ url_for('drinkify.drink', slug=p.drink.slug) }}">{{ p.drink.name }}</a></h2>
+
+{% include "_recipe.html" with context %}
+
+{% if p.quip %}<p class="quip">{{ p.quip }}</p>{% endif %}
+
+<p class="why">
+{% for r in p.reasons %}{{ r }}{% if not loop.last %}<br>{% endif %}{% endfor %}
+</p>
+
+{% if p.alternates %}
+<p>also try:
+{% for a in p.alternates %}<a href="{{ url_for('drinkify.drink', slug=a.slug) }}">{{ a.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+</p>
+{% endif %}
+
+<form action="{{ url_for('drinkify.index') }}" method="get" class="search again">
+<label for="artist">another artist:</label><br>
+<input type="text" id="artist" name="artist" autocomplete="off" required maxlength="200">
+<button type="submit">drinkify</button>
+</form>
+<p class="small">link to this: <a href="{{ url_for('drinkify.artist', mbid=p.artist.mbid) }}">{{ url_for('drinkify.artist', mbid=p.artist.mbid, _external=True) }}</a></p>
+{% endblock %}

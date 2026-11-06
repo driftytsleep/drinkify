@@ -1,0 +1,53 @@
+{
+ "id": "056e4f3e-d505-4dad-8ec1-d04f521cbb56",
+ "name": "Daft Punk",
+ "type": "Group",
+ "country": "FR",
+ "area": {
+  "name": "France"
+ },
+ "life-span": {
+  "begin": "1993"
+ },
+ "disambiguation": "",
+ "genres": [
+  {
+   "name": "house",
+   "count": 12
+  },
+  {
+   "name": "french house",
+   "count": 10
+  },
+  {
+   "name": "electronic",
+   "count": 8
+  },
+  {
+   "name": "disco",
+   "count": 4
+  }
+ ],
+ "tags": [
+  {
+   "name": "house",
+   "count": 12
+  },
+  {
+   "name": "french house",
+   "count": 10
+  },
+  {
+   "name": "electronic",
+   "count": 8
+  },
+  {
+   "name": "disco",
+   "count": 4
+  },
+  {
+   "name": "robots",
+   "count": 1
+  }
+ ]
+}

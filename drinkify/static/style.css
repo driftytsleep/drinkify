@@ -1,0 +1,60 @@
+/* drinkify: white page, black helvetica, nothing else. */
+:root { --fg: #000; --bg: #fff; --dim: #666; --link: #00e; --visited: #551a8b; --rule: #000; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg: #eee; --bg: #000; --dim: #999; --link: #8ab4ff; --visited: #c58af9; --rule: #eee; }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 18px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.page { max-width: 40rem; margin: 0 auto; padding: 2rem 16px 3rem; }
+
+a { color: var(--link); }
+a:visited { color: var(--visited); }
+
+h1, h2 { font-weight: bold; letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 .5rem; }
+h2 { font-size: 1.4rem; margin-top: 2rem; }
+
+.masthead { margin: 0 0 2rem; font-weight: bold; font-size: 1.4rem; letter-spacing: -0.03em; }
+.masthead a, .masthead a:visited { color: var(--fg); text-decoration: none; }
+
+.logo { font-size: clamp(3.5rem, 15vw, 7rem); letter-spacing: -0.05em; margin: 2rem 0 0; }
+.tagline { font-size: 1.4rem; margin: 0 0 2.5rem; }
+
+.for { margin: 1.5rem 0 0; font-size: 1.1rem; }
+.artist { font-size: clamp(2.4rem, 10vw, 4.5rem); letter-spacing: -0.04em; overflow-wrap: anywhere; }
+.drink { font-size: clamp(2rem, 7vw, 3rem); letter-spacing: -0.03em; margin-top: 0; }
+.drink a, .drink a:visited { color: var(--fg); text-decoration: none; }
+.drink a:hover { text-decoration: underline; }
+
+.recipe { list-style: none; padding: 0; margin: 1.25rem 0; font-size: 1.5rem; font-weight: bold; line-height: 1.3; }
+.steps { font-size: 1.15rem; }
+.quip { font-size: 1.25rem; font-style: italic; margin: 1.5rem 0; }
+.why, .small, .foot { font-size: .85rem; color: var(--dim); }
+.big { font-size: 1.4rem; }
+
+.plain { list-style: none; padding: 0; }
+.plain li { margin: .2rem 0; }
+.plain.big li { font-size: 1.3rem; margin: .5rem 0; }
+.menu { line-height: 1.8; }
+
+.search { margin: 0 0 2rem; }
+.search.again { margin-top: 3rem; }
+.search label { font-weight: bold; font-size: 1.1rem; }
+.search input {
+  font: inherit; font-size: 1.5rem;
+  width: 100%; max-width: 24rem; box-sizing: border-box;
+  margin: .4rem .4rem .4rem 0; padding: .2rem .3rem;
+  border: 2px solid var(--rule); border-radius: 0; background: var(--bg); color: var(--fg);
+}
+.search button {
+  font: inherit; font-size: 1.2rem; font-weight: bold;
+  padding: .3rem .8rem; border: 2px solid var(--rule); border-radius: 0;
+  background: var(--fg); color: var(--bg); cursor: pointer;
+}
+
+.foot { margin-top: 4rem; border-top: 1px solid var(--rule); padding-top: .75rem; }

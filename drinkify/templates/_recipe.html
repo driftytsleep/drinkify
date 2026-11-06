@@ -1,0 +1,8 @@
+{% set d = p.drink if p is defined else d %}
+<ul class="recipe">
+{% for amount, name in d.ingredients %}
+<li>{% if amount %}{{ amount }} {% endif %}{{ name }}</li>
+{% endfor %}
+</ul>
+<p class="steps">{{ d.instructions }}</p>
+<p class="small">serve in a {{ d.glass }}. method: {{ d.method }}.</p>

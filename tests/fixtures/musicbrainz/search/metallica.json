@@ -1,0 +1,18 @@
+{
+ "artists": [
+  {
+   "id": "65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab",
+   "name": "Metallica",
+   "type": "Group",
+   "country": "US",
+   "area": {
+    "name": "United States"
+   },
+   "life-span": {
+    "begin": "1981-10-28"
+   },
+   "disambiguation": "",
+   "score": 100
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "artists": [
+  {
+   "id": "0c751690-c784-4a4f-b1e4-c1de27d47581",
+   "name": "Slowdive",
+   "type": "Group",
+   "country": "GB",
+   "area": {
+    "name": "England"
+   },
+   "life-span": {
+    "begin": "1989"
+   },
+   "disambiguation": "British shoegaze band",
+   "score": 100
+  }
+ ]
+}

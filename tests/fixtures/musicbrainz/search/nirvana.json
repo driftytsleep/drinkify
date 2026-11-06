@@ -1,0 +1,32 @@
+{
+ "artists": [
+  {
+   "id": "5b11f4ce-a62d-471e-81fc-a69a8278c7da",
+   "name": "Nirvana",
+   "type": "Group",
+   "country": "US",
+   "area": {
+    "name": "United States"
+   },
+   "life-span": {
+    "begin": "1987"
+   },
+   "disambiguation": "1980s–1990s US grunge band",
+   "score": 100
+  },
+  {
+   "id": "9282c8b4-ca0b-4c6b-b7e3-4f7762dfc4d6",
+   "name": "Nirvana",
+   "type": "Group",
+   "country": "GB",
+   "area": {
+    "name": "United Kingdom"
+   },
+   "life-span": {
+    "begin": "1965"
+   },
+   "disambiguation": "60s band from the UK",
+   "score": 100
+  }
+ ]
+}

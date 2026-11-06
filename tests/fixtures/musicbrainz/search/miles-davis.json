@@ -1,0 +1,18 @@
+{
+ "artists": [
+  {
+   "id": "561d854a-6a28-4aa7-8c99-323e6ce46c2a",
+   "name": "Miles Davis",
+   "type": "Person",
+   "country": "US",
+   "area": {
+    "name": "United States"
+   },
+   "life-span": {
+    "begin": "1926-05-26"
+   },
+   "disambiguation": "",
+   "score": 100
+  }
+ ]
+}

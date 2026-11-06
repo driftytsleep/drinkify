@@ -1,0 +1,33 @@
+{
+ "id": "9282c8b4-ca0b-4c6b-b7e3-4f7762dfc4d6",
+ "name": "Nirvana",
+ "type": "Group",
+ "country": "GB",
+ "area": {
+  "name": "United Kingdom"
+ },
+ "life-span": {
+  "begin": "1965"
+ },
+ "disambiguation": "60s band from the UK",
+ "genres": [
+  {
+   "name": "psychedelic pop",
+   "count": 4
+  },
+  {
+   "name": "baroque pop",
+   "count": 3
+  }
+ ],
+ "tags": [
+  {
+   "name": "psychedelic pop",
+   "count": 4
+  },
+  {
+   "name": "baroque pop",
+   "count": 3
+  }
+ ]
+}

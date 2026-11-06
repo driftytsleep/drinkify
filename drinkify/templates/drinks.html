@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}all drinks | drinkify{% endblock %}
+{% block content %}
+<h1 class="artist">the menu</h1>
+{% for cat, items in by_cat.items() if items %}
+<h2>{{ cat }}{% if cat not in ("punch",) %}s{% endif %} ({{ items|length }})</h2>
+<p class="menu">{% for d in items %}<a href="{{ url_for('drinkify.drink', slug=d.slug) }}">{{ d.name }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}hmm | drinkify{% endblock %}
+{% block content %}
+{% if query %}<h1 class="artist">{{ query }}</h1>{% endif %}
+<p class="big">{{ message }}</p>
+<p class="small">in the meantime: a glass of water.</p>
+<form action="{{ url_for('drinkify.index') }}" method="get" class="search">
+<label for="artist">try another artist:</label><br>
+<input type="text" id="artist" name="artist" autocomplete="off" required maxlength="200" value="{{ query }}">
+<button type="submit">drinkify</button>
+</form>
+{% endblock %}

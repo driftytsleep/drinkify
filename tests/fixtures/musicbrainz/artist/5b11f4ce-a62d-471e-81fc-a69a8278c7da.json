@@ -1,0 +1,45 @@
+{
+ "id": "5b11f4ce-a62d-471e-81fc-a69a8278c7da",
+ "name": "Nirvana",
+ "type": "Group",
+ "country": "US",
+ "area": {
+  "name": "United States"
+ },
+ "life-span": {
+  "begin": "1987"
+ },
+ "disambiguation": "1980s–1990s US grunge band",
+ "genres": [
+  {
+   "name": "grunge",
+   "count": 18
+  },
+  {
+   "name": "alternative rock",
+   "count": 10
+  },
+  {
+   "name": "punk rock",
+   "count": 4
+  }
+ ],
+ "tags": [
+  {
+   "name": "grunge",
+   "count": 18
+  },
+  {
+   "name": "alternative rock",
+   "count": 10
+  },
+  {
+   "name": "punk rock",
+   "count": 4
+  },
+  {
+   "name": "seattle",
+   "count": 2
+  }
+ ]
+}

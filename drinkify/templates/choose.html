@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}which {{ query }}? | drinkify{% endblock %}
+{% block content %}
+<h1 class="artist">which {{ query }}?</h1>
+<ul class="plain big">
+{% for c in candidates %}
+<li><a href="{{ url_for('drinkify.artist', mbid=c.mbid) }}">{{ c.name }}</a>{% set extra = c|describe %}{% if extra %} <span class="small">({{ extra }})</span>{% endif %}</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}how it works | drinkify{% endblock %}
+{% block content %}
+<h1 class="artist">how it works</h1>
+<p>no AI. just a lookup table, some arithmetic and good taste.</p>
+<ol>
+<li>we look the artist up on <a href="https://musicbrainz.org/">MusicBrainz</a> and read their genre tags, the votes on each tag, where they're from, when they started, and whether they're a person, a band or an orchestra.</li>
+<li>each tag is matched against {{ n_genres }} genres (plus {{ n_aliases }} other spellings). unknown sub-genres fall back to the genre they end with: "swedish melodic death metal" counts as death metal.</li>
+<li>every genre has a flavor profile (strength, sweet, sour, bitter, smoky, fizzy, fruity, herbal, creamy, rich), favorite spirits and a vibe. the artist's profile is the vote-weighted mix of their genres.</li>
+<li>all {{ n_drinks }} drinks get a score: {{ (weights[0]*100)|round|int }}% flavor match, {{ (weights[1]*100)|round|int }}% spirit match, {{ (weights[2]*100)|round|int }}% vibe match, {{ (weights[3]*100)|round|int }}% local color (country, era, band size).</li>
+<li>highest score wins. near-ties are broken by a hash of the artist's id, so the same artist always gets the same drink.</li>
+</ol>
+<p>a homage to the original drinkify.</p>
+{% endblock %}

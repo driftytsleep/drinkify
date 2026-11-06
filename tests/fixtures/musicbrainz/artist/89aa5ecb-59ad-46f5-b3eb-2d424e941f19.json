@@ -1,0 +1,41 @@
+{
+ "id": "89aa5ecb-59ad-46f5-b3eb-2d424e941f19",
+ "name": "Bad Bunny",
+ "type": "Person",
+ "country": "PR",
+ "area": {
+  "name": "Puerto Rico"
+ },
+ "life-span": {
+  "begin": "1994-03-10"
+ },
+ "disambiguation": "",
+ "genres": [
+  {
+   "name": "reggaeton",
+   "count": 14
+  },
+  {
+   "name": "latin trap",
+   "count": 9
+  },
+  {
+   "name": "latin pop",
+   "count": 4
+  }
+ ],
+ "tags": [
+  {
+   "name": "reggaeton",
+   "count": 14
+  },
+  {
+   "name": "latin trap",
+   "count": 9
+  },
+  {
+   "name": "latin pop",
+   "count": 4
+  }
+ ]
+}

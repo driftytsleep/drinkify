@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}drinkify{% endblock %}</title>
+<meta name="description" content="{% block description %}drinkify: music to drink to. enter an artist, get a drink.{% endblock %}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="page">
+{% block header %}
+<p class="masthead"><a href="{{ url_for('drinkify.index') }}">drinkify</a></p>
+{% endblock %}
+{% block content %}{% endblock %}
+<p class="foot">
+<a href="{{ url_for('drinkify.index') }}">home</a> &middot;
+<a href="{{ url_for('drinkify.drinks') }}">all drinks</a> &middot;
+<a href="{{ url_for('drinkify.about') }}">how it works</a>
+<br>artist data from <a href="https://musicbrainz.org/">MusicBrainz</a>. drink responsibly. 21+ / of legal drinking age.
+</p>
+</div>
+</body>
+</html>

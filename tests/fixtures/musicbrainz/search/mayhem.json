@@ -1,0 +1,18 @@
+{
+ "artists": [
+  {
+   "id": "1c2e7e6f-1a4f-4b0a-9a3e-6a5b3e2f7d11",
+   "name": "Mayhem",
+   "type": "Group",
+   "country": "NO",
+   "area": {
+    "name": "Norway"
+   },
+   "life-span": {
+    "begin": "1984"
+   },
+   "disambiguation": "Norwegian black metal band",
+   "score": 100
+  }
+ ]
+}

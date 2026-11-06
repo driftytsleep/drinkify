@@ -1,0 +1,57 @@
+{
+ "id": "561d854a-6a28-4aa7-8c99-323e6ce46c2a",
+ "name": "Miles Davis",
+ "type": "Person",
+ "country": "US",
+ "area": {
+  "name": "United States"
+ },
+ "life-span": {
+  "begin": "1926-05-26"
+ },
+ "disambiguation": "",
+ "genres": [
+  {
+   "name": "jazz",
+   "count": 16
+  },
+  {
+   "name": "cool jazz",
+   "count": 10
+  },
+  {
+   "name": "modal jazz",
+   "count": 8
+  },
+  {
+   "name": "jazz fusion",
+   "count": 6
+  },
+  {
+   "name": "hard bop",
+   "count": 5
+  }
+ ],
+ "tags": [
+  {
+   "name": "jazz",
+   "count": 16
+  },
+  {
+   "name": "cool jazz",
+   "count": 10
+  },
+  {
+   "name": "modal jazz",
+   "count": 8
+  },
+  {
+   "name": "jazz fusion",
+   "count": 6
+  },
+  {
+   "name": "hard bop",
+   "count": 5
+  }
+ ]
+}

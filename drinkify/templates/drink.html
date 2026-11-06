@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ d.name }} | drinkify{% endblock %}
+{% block content %}
+<h1 class="drink">{{ d.name }}</h1>
+<p class="small">{{ d.category }} &middot; {{ d.base_spirit }}{% if d.era %} &middot; since about {{ d.era }}{% endif %}</p>
+{% include "_recipe.html" %}
+<p class="small">feels: {{ d.tags|sort|join(", ") }}</p>
+{% endblock %}
