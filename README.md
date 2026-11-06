@@ -40,13 +40,18 @@ On any other host, run `flask --app drinkify init-db && gunicorn "drinkify:creat
 All of this lives in `drinkify/matcher.py`.
 
 1. Look up the artist on MusicBrainz and read their genre/tag votes, country, start year and type. The client allows 1 request per second, and results are cached in SQLite for 30 days.
-2. Match each tag to a genre in `genres.json`: exactly, by alias, or by backing off to the last words ("swedish melodic death metal" → "death metal"). Non-genre tags like "seen live" are ignored.
+2. Match each tag to a genre in `genres.json`: exactly, by alias, or by backing off to the last words ("swedish melodic death metal" → "melodic death metal"). Sub-genres such as brutal, technical, melodic and old-school death metal have their own profiles.
 3. The artist's target profile is the vote-weighted mix of those genres. That covers a 10-axis flavor vector (strength, sweet, sour, bitter, smoky, fizzy, fruity, herbal, creamy, rich), preferred spirits and vibe tags.
-4. Score every drink:
+4. Descriptive tags from `descriptors.json` ("brutal", "atmospheric", "gore", "melodic", "finnish", …) nudge that profile. Tags that are neither genres nor descriptors, such as "seen live", are ignored.
+5. A per-artist fingerprint, derived from the MusicBrainz id, shifts the target slightly on every axis and spirit. Two bands with identical tags then still land on different drinks.
+6. Score every drink:
    `0.45 × flavor similarity + 0.25 × spirit match + 0.15 × vibe overlap + 0.15 × local color`.
    Local color covers the country's spirit (Mexico → tequila, Norway → aquavit, …), the era (pre-1970 artists → classic drinks) and orchestras/choirs (→ punch).
-5. The best score wins. Drinks within 0.03 of the best score count as a tie, and the tie is broken by a hash of the artist's MusicBrainz id, so the same artist always gets the same drink.
-6. An artist with no usable genre data gets a "house pour", picked the same deterministic way.
+7. The drinks within 0.15 of the best score form a shortlist of up to 10, and no single category may take more than 60% of it. One drink is drawn using a hash of the artist id, weighted toward the top: the n-th drink has weight 0.85ⁿ. The same artist always gets the same drink.
+8. A personal twist from `twists.json` is chosen the same way, from the twists that suit the drink: "rinse the glass with mezcal first." is never paired with a can of lager.
+9. An artist with no usable genre data gets a "house pour".
+
+The tuning constants are at the top of `matcher.py`.
 
 The result page shows the reasoning ("sounds like: shoegaze 50%, dream pop 39% · from England, so gin").
 
@@ -57,6 +62,8 @@ The JSON files in `drinkify/data/` are the source of truth:
 - `drinks.json` has a name, category, base spirit, glass, method, steps, ingredients, vibe tags, and `f`: 10 flavor values from 0 to 10.
 - `genres.json` has a flavor profile, spirits, vibes, a quip and aliases. A genre with a `parent` inherits any field it leaves out.
 - `countries.json` maps a country code to regional spirits.
+- `descriptors.json` holds non-genre tags, each with flavor nudges, vibes, spirits or a country.
+- `twists.json` holds personal twists, with filters for which drinks each one suits.
 
 After editing them, run `flask --app drinkify init-db` to rebuild the catalog. Add `--reset-cache` to also clear cached artists and recent pairings.
 

@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS drink_tags;
 DROP TABLE IF EXISTS drink_ingredients;
 DROP TABLE IF EXISTS ingredients;
 DROP TABLE IF EXISTS drinks;
+DROP TABLE IF EXISTS descriptors;
+DROP TABLE IF EXISTS twists;
 DROP TABLE IF EXISTS genre_aliases;
 DROP TABLE IF EXISTS genres;
 DROP TABLE IF EXISTS countries;
@@ -58,6 +60,21 @@ CREATE TABLE genres (
 CREATE TABLE genre_aliases (
     alias TEXT PRIMARY KEY,
     genre TEXT NOT NULL REFERENCES genres(name)
+);
+
+CREATE TABLE descriptors (
+    tag          TEXT PRIMARY KEY,  -- the tag as it appears on MusicBrainz (name or alias)
+    name         TEXT NOT NULL,     -- canonical descriptor name
+    deltas_json  TEXT NOT NULL,     -- 10 flavor deltas, -1..1
+    vibes_json   TEXT NOT NULL,
+    spirits_json TEXT NOT NULL,
+    country      TEXT
+);
+
+CREATE TABLE twists (
+    id           INTEGER PRIMARY KEY,
+    text         TEXT NOT NULL,
+    filters_json TEXT NOT NULL
 );
 
 CREATE TABLE countries (

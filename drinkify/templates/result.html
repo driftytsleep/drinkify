@@ -10,6 +10,7 @@
 <h2 class="drink"><a href="{{ url_for('drinkify.drink', slug=p.drink.slug) }}">{{ p.drink.name }}</a></h2>
 
 {% include "_recipe.html" with context %}
+{% if p.twist %}<p class="twist"><b>your twist:</b> {{ p.twist }}</p>{% endif %}
 
 {% if p.quip %}<p class="quip">{{ p.quip }}</p>{% endif %}
 

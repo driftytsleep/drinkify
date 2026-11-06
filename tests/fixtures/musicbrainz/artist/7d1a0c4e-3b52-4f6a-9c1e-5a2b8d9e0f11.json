@@ -1,0 +1,41 @@
+{
+ "id": "7d1a0c4e-3b52-4f6a-9c1e-5a2b8d9e0f11",
+ "name": "Gorephilia",
+ "type": "Group",
+ "country": "FI",
+ "area": {
+  "name": "Finland"
+ },
+ "life-span": {
+  "begin": "2004"
+ },
+ "disambiguation": "Finnish death metal band",
+ "genres": [
+  {
+   "name": "death metal",
+   "count": 6
+  },
+  {
+   "name": "old school death metal",
+   "count": 3
+  }
+ ],
+ "tags": [
+  {
+   "name": "death metal",
+   "count": 6
+  },
+  {
+   "name": "old school death metal",
+   "count": 3
+  },
+  {
+   "name": "finnish",
+   "count": 2
+  },
+  {
+   "name": "cavernous",
+   "count": 1
+  }
+ ]
+}

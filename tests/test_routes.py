@@ -87,3 +87,18 @@ def test_about(client):
 def test_html_is_escaped(client):
     html = client.get("/?artist=<script>alert(1)</script>").get_data(as_text=True)
     assert "<script>alert" not in html
+
+
+def test_result_shows_twist(client):
+    html = client.get(f"/a/{METALLICA}").get_data(as_text=True)
+    assert "your twist:" in html
+
+
+def test_death_metal_neighbors_differ(client):
+    gore = client.get("/?artist=gorephilia", follow_redirects=True).get_data(as_text=True)
+    faceless = client.get("/?artist=faceless burial", follow_redirects=True).get_data(as_text=True)
+
+    def drink(html):
+        return html.split('<h2 class="drink">', 1)[1].split("</h2>", 1)[0]
+
+    assert drink(gore) != drink(faceless)

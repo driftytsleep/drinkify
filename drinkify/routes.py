@@ -100,7 +100,8 @@ def drinks():
 def about():
     cat = get_catalog()
     return render_template("about.html", n_drinks=len(cat.drinks), n_genres=len(cat.genres),
-                           n_aliases=len(cat.aliases), weights=(matcher.W_FLAVOR, matcher.W_SPIRIT,
+                           n_aliases=len(cat.aliases), n_descriptors=len(cat.descriptors),
+                           n_twists=len(cat.twists), weights=(matcher.W_FLAVOR, matcher.W_SPIRIT,
                                                                 matcher.W_VIBE, matcher.W_MODIFIER))
 
 

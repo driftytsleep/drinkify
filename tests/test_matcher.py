@@ -25,9 +25,12 @@ def fixture_artist(mbid):
     ("drum and bass", "drum and bass", True),
     ("drum & bass", "drum and bass", True),
     ("dream pop", "shoegaze", True),
-    ("swedish melodic death metal", "death metal", False),
+    ("swedish melodic death metal", "melodic death metal", False),
+    ("melodic death metal", "melodic death metal", True),
+    ("slam", "brutal death metal", True),
     ("japanese noise rock", "experimental", False),
-    ("true norwegian black metal", "black metal", False),
+    ("true norwegian black metal", "black metal", True),
+    ("raw atmospheric black metal", "atmospheric black metal", False),
 ])
 def test_resolve_genre(catalog, tag, expected, exact):
     assert M.resolve_genre(tag, catalog) == (expected, exact)
@@ -46,8 +49,10 @@ def test_every_parent_and_alias_points_at_a_real_genre(catalog):
 
 
 def test_catalog_shape(catalog):
-    assert len(catalog.drinks) >= 150
-    assert len(catalog.genres) >= 100
+    assert len(catalog.drinks) >= 190
+    assert len(catalog.genres) >= 140
+    assert len(catalog.descriptors) >= 60
+    assert len(catalog.twists) >= 40
     assert {d.category for d in catalog.drinks} == {"cocktail", "shot", "beer", "wine", "neat", "punch"}
     for d in catalog.drinks:
         assert len(d.vec) == len(M.AXES) and all(0 <= x <= 1 for x in d.vec), d.slug
@@ -92,7 +97,7 @@ def test_disco_gets_something_fizzy_and_sweet(catalog):
     p = M.pair(artist([("disco", 10)]), catalog)
     assert axis(p.drink, "fizzy") >= 0.7
     assert axis(p.drink, "sweet") >= 0.2
-    assert p.drink.tags & {"party", "retro"}
+    assert p.drink.tags & {"party", "retro", "cheesy", "bright"}
 
 
 def test_folk_gets_something_mellow_and_earthy(catalog):
@@ -126,11 +131,11 @@ def test_same_artist_always_gets_same_drink(catalog):
     assert all(M.pair(a, catalog).drink.slug == first for _ in range(5))
 
 
-def test_tie_break_depends_on_artist_id(catalog):
-    # Same tags, many different ids: the hash spreads them over the tied drinks.
+def test_pick_depends_on_artist_id(catalog):
+    # Same tags, many different ids: the fingerprint and the draw spread them over several drinks.
     tags = [("pop", 10)]
     picks = {M.pair(artist(tags, mbid=f"00000000-0000-0000-0000-{i:012d}"), catalog).drink.slug for i in range(40)}
-    assert 1 <= len(picks) <= M.MAX_TIED
+    assert 5 <= len(picks) <= 20
 
 
 def test_genres_produce_varied_drinks(catalog):
@@ -170,3 +175,130 @@ def test_fixture_artists_pair_sensibly(catalog):
     assert len({metallica.slug, abba.slug, miles.slug}) == 3
     assert axis(metallica, "sweet") < axis(abba, "sweet")
     assert miles.tags & {"classic", "elegant", "slick"}
+
+
+# ---------------------------------------------------------------- uniqueness within a genre
+
+def _uuid(label, i):
+    import uuid
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"{label}/{i}"))
+
+
+DEATH_METAL_BANDS = [
+    ([("death metal", 5), ("old school death metal", 3)], "FI", 2004),
+    ([("death metal", 4), ("old school death metal", 2)], "AU", 2014),
+    ([("death metal", 15), ("brutal death metal", 6)], "US", 1988),
+    ([("brutal death metal", 6), ("technical death metal", 4), ("grindcore", 2)], "US", 1991),
+    ([("death metal", 12), ("technical death metal", 8), ("progressive metal", 3)], "US", 1983),
+    ([("melodic death metal", 10), ("death metal", 4)], "SE", 1990),
+    ([("death metal", 3)], "US", 2016),
+    ([("death metal", 3)], "DE", 1995),
+    ([("death metal", 2), ("gore", 1)], "CZ", 2001),
+    ([("goregrind", 4), ("death metal", 2)], "CZ", 1999),
+    ([("death-doom", 5), ("death metal", 3)], "GB", 1990),
+    ([("death metal", 6), ("brutal", 2)], "US", 2010),
+    ([("death metal", 6), ("cavernous", 3)], "US", 2015),
+    ([("old school death metal", 6), ("swedish", 2)], None, 2012),
+    ([("technical death metal", 6)], "CA", 2005),
+    ([("blackened death metal", 5)], "PL", 1991),
+    ([("death metal", 5), ("melodic", 2)], "FI", 2008),
+    ([("brutal death metal", 5), ("slamming", 3)], "RU", 2010),
+    ([("death metal", 4), ("atmospheric", 2)], "NL", 2018),
+    ([("death metal", 7), ("old school death metal", 7)], "US", 2009),
+]
+
+
+def test_death_metal_bands_get_mostly_different_drinks(catalog):
+    picks = [M.pair(artist(tags, mbid=_uuid("dm", i), country=cc, begin_year=y, type="Group"), catalog).drink
+             for i, (tags, cc, y) in enumerate(DEATH_METAL_BANDS)]
+    assert len({d.slug for d in picks}) >= 12
+    for d in picks:
+        assert not d.tags & {"cheesy", "summery", "tropical", "romantic", "bright"}, d.name
+        assert axis(d, "sweet") <= 0.7, d.name
+
+
+@pytest.mark.parametrize("genre,minimum", [
+    ("death metal", 9), ("black metal", 5), ("house", 7), ("indie rock", 6), ("folk", 8), ("jazz", 6),
+])
+def test_identically_tagged_artists_still_vary(catalog, genre, minimum):
+    picks = {M.pair(artist([(genre, 5)], mbid=_uuid(genre, i), country="US"), catalog).drink.slug
+             for i in range(20)}
+    assert len(picks) >= minimum
+
+
+def test_metal_variety_stays_on_style(catalog):
+    for i in range(20):
+        d = M.pair(artist([("death metal", 5)], mbid=_uuid("pure-dm", i)), catalog).drink
+        assert axis(d, "strength") >= 0.5 and axis(d, "sweet") <= 0.6, d.name
+
+
+def test_subgenres_differ_from_parent(catalog):
+    base = catalog.genres["death metal"]
+    for name in ("brutal death metal", "technical death metal", "melodic death metal", "old school death metal",
+                 "death-doom", "goregrind"):
+        g = catalog.genres[name]
+        assert g.vec != base.vec or g.spirits != base.spirits, name
+
+
+# ---------------------------------------------------------------- descriptors
+
+def test_descriptors_nudge_the_profile(catalog):
+    plain = M.build_profile(artist([("death metal", 10)]), catalog)
+    atmo = M.build_profile(artist([("death metal", 10), ("atmospheric", 5)]), catalog)
+    melodic = M.build_profile(artist([("death metal", 10), ("melodic", 5)]), catalog)
+    herbal, sweet = M.AXES.index("herbal"), M.AXES.index("sweet")
+    assert atmo.vec[herbal] > plain.vec[herbal]
+    assert melodic.vec[sweet] > plain.vec[sweet]
+    assert "atmospheric" in atmo.descriptors
+    gore = M.build_profile(artist([("death metal", 10), ("gore", 10)]), catalog)
+    assert gore.vibes.get("bloody", 0) > 0
+
+
+def test_descriptor_country_used_only_when_missing(catalog):
+    p = M.build_profile(artist([("death metal", 5), ("finnish", 2)]), catalog)
+    assert p.country == "FI"
+    a = artist([("death metal", 5), ("finnish", 2)], country="US")
+    assert M.country_spirits(a, catalog, p)[0] == "USA"
+
+
+def test_leading_words_of_backed_off_tags_count_as_descriptors(catalog):
+    p = M.build_profile(artist([("brutal swedish black metal", 5)]), catalog)
+    assert p.matches[0].genre == "black metal"
+    assert "brutal" in p.descriptors and p.country == "SE"
+
+
+# ---------------------------------------------------------------- twists
+
+def test_every_pick_gets_a_compatible_twist(catalog):
+    for i, (tags, cc, y) in enumerate(DEATH_METAL_BANDS):
+        a = artist(tags, mbid=_uuid("tw", i), country=cc, begin_year=y)
+        p = M.pair(a, catalog)
+        assert p.twist
+        t = next(t for t in catalog.twists if t.text == p.twist)
+        assert M.twist_fits(t, p.drink)
+
+
+def test_twist_filters(catalog):
+    lager = next(d for d in catalog.drinks if d.slug == "cheap-lager")
+    fitting = {t.text for t in catalog.twists if M.twist_fits(t, lager)}
+    assert "rinse the glass with mezcal first." not in fitting
+    assert "pour it into a frozen glass." in fitting
+    martini = next(d for d in catalog.drinks if d.slug == "martini")
+    assert not any("simple syrup" in t.text and M.twist_fits(t, martini) for t in catalog.twists)
+
+
+def test_every_drink_has_at_least_one_twist(catalog):
+    for d in catalog.drinks:
+        assert any(M.twist_fits(t, d) for t in catalog.twists), d.slug
+
+
+def test_same_artist_same_drink_and_twist(catalog):
+    a = artist([("death metal", 5), ("brutal", 2)], mbid=_uuid("same", 1), country="FI")
+    first = M.pair(a, catalog)
+    for _ in range(3):
+        again = M.pair(a, catalog)
+        assert (again.drink.slug, again.twist) == (first.drink.slug, first.twist)
+
+
+def test_fallback_gets_a_twist(catalog):
+    assert M.pair(artist([("seen live", 1)]), catalog).twist

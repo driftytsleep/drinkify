@@ -33,6 +33,7 @@ h2 { font-size: 1.4rem; margin-top: 2rem; }
 
 .recipe { list-style: none; padding: 0; margin: 1.25rem 0; font-size: 1.5rem; font-weight: bold; line-height: 1.3; }
 .steps { font-size: 1.15rem; }
+.twist { font-size: 1.15rem; border-left: 4px solid var(--rule); padding-left: .6rem; }
 .quip { font-size: 1.25rem; font-style: italic; margin: 1.5rem 0; }
 .why, .small, .foot { font-size: .85rem; color: var(--dim); }
 .big { font-size: 1.4rem; }

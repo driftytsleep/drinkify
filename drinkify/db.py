@@ -9,7 +9,7 @@ from pathlib import Path
 import click
 from flask import current_app, g
 
-from .matcher import AXES, Catalog, Drink, Genre
+from .matcher import AXES, Catalog, Descriptor, Drink, Genre, Twist
 
 DATA_DIR = Path(__file__).parent / "data"
 SCHEMA = Path(__file__).parent / "schema.sql"
@@ -124,8 +124,37 @@ def seed(conn: sqlite3.Connection, data_dir: Path = DATA_DIR) -> dict[str, int]:
     for code, c in countries.items():
         conn.execute("INSERT INTO countries VALUES (?, ?, ?)", (code, c["name"], json.dumps(c["spirits"])))
 
+    descriptors = json.loads((data_dir / "descriptors.json").read_text())["descriptors"]
+    seen_tags: dict[str, str] = {}
+    for name, spec in descriptors.items():
+        unknown = set(spec.get("d", {})) - set(AXES)
+        if unknown:
+            raise ValueError(f"descriptor {name!r} has unknown axes {sorted(unknown)}")
+        if spec.get("country") and spec["country"] not in countries:
+            raise ValueError(f"descriptor {name!r} points at unknown country {spec['country']!r}")
+        deltas = [round(spec.get("d", {}).get(a, 0) / 10.0, 3) for a in AXES]
+        for tag in [name] + spec.get("aliases", []):
+            tag = tag.lower()
+            if tag in genres or tag in aliases:
+                raise ValueError(f"descriptor tag {tag!r} is already a genre; genres win, so drop it")
+            if tag in seen_tags:
+                raise ValueError(f"descriptor tag {tag!r} used by both {seen_tags[tag]!r} and {name!r}")
+            seen_tags[tag] = name
+            conn.execute("INSERT INTO descriptors VALUES (?, ?, ?, ?, ?, ?)",
+                         (tag, name, json.dumps(deltas), json.dumps(sorted(set(spec.get("vibes", [])))),
+                          json.dumps(spec.get("spirits", {})), spec.get("country")))
+
+    twists = json.loads((data_dir / "twists.json").read_text())["twists"]
+    allowed = {"text", "methods", "not_methods", "categories", "not_categories", "spirits", "not_spirits", "needs"}
+    for t in twists:
+        if set(t) - allowed:
+            raise ValueError(f"twist {t.get('text')!r} has unknown keys {sorted(set(t) - allowed)}")
+        filters = {k: v for k, v in t.items() if k != "text"}
+        conn.execute("INSERT INTO twists (text, filters_json) VALUES (?, ?)", (t["text"], json.dumps(filters)))
+
     return {"drinks": len(drinks), "ingredients": len(ingredient_ids), "genres": len(genres),
-            "aliases": len(aliases), "countries": len(countries)}
+            "aliases": len(aliases), "descriptors": len(descriptors), "twists": len(twists),
+            "countries": len(countries)}
 
 
 def init_db(conn: sqlite3.Connection, reset_cache: bool = False) -> dict[str, int]:
@@ -173,7 +202,16 @@ def load_catalog(conn: sqlite3.Connection) -> Catalog:
     aliases = {r["alias"]: r["genre"] for r in conn.execute("SELECT alias, genre FROM genre_aliases")}
     countries = {r["code"]: {"name": r["name"], "spirits": json.loads(r["spirits_json"])}
                  for r in conn.execute("SELECT * FROM countries")}
-    return Catalog(drinks=drinks, genres=genres, aliases=aliases, countries=countries)
+    descriptors = {
+        r["tag"]: Descriptor(name=r["name"], deltas=tuple(json.loads(r["deltas_json"])),
+                             vibes=frozenset(json.loads(r["vibes_json"])),
+                             spirits=json.loads(r["spirits_json"]), country=r["country"])
+        for r in conn.execute("SELECT * FROM descriptors")
+    }
+    twists = [Twist(text=r["text"], filters=json.loads(r["filters_json"]))
+              for r in conn.execute("SELECT * FROM twists ORDER BY id")]
+    return Catalog(drinks=drinks, genres=genres, aliases=aliases, countries=countries,
+                   descriptors=descriptors, twists=twists)
 
 
 def get_catalog() -> Catalog:
