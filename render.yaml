@@ -1,0 +1,26 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# In Render: New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: drinkify
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # init-db rebuilds the drink/genre catalog from drinkify/data/*.json on every start, so edits
+    # to the JSON go live on deploy. Cached MusicBrainz data and recent pairings are kept.
+    # One worker process keeps the MusicBrainz rate limit (1 request/second) process-wide.
+    startCommand: flask --app drinkify init-db && gunicorn "drinkify:create_app()" --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 30
+    healthCheckPath: /about
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DRINKIFY_USER_AGENT
+        sync: false   # Render asks for this on first deploy, e.g. "Drinkify/1.0 (you@example.com)"
+      # On the free plan the disk is wiped on each deploy/restart. To keep recent pairings and the
+      # MusicBrainz cache, switch to a paid plan, uncomment the disk below and DRINKIFY_DB.
+      # - key: DRINKIFY_DB
+      #   value: /data/drinkify.sqlite
+    # disk:
+    #   name: drinkify-data
+    #   mountPath: /data
+    #   sizeGB: 1

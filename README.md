@@ -27,6 +27,14 @@ Run the tests with `pytest`.
 | `DRINKIFY_USER_AGENT` | `Drinkify/1.0 (+https://github.com/driftytsleep/drinkify)`; MusicBrainz asks for a contact URL or email |
 | `DRINKIFY_MB_TIMEOUT` | `5` seconds |
 
+## Deploy (Render)
+
+`render.yaml` is a Render Blueprint. In Render, choose **New → Blueprint** and pick this repo. When asked, set `DRINKIFY_USER_AGENT` to something like `Drinkify/1.0 (you@example.com)`, since MusicBrainz asks for a contact. Then deploy.
+
+The free plan wipes the disk on each deploy or restart. That only resets the "recently drinkified" list and the MusicBrainz cache; the drink catalog is rebuilt from the JSON on every start. To keep that data, use a paid plan and uncomment the `disk` and `DRINKIFY_DB` lines in `render.yaml`.
+
+On any other host, run `flask --app drinkify init-db && gunicorn "drinkify:create_app()" --bind 0.0.0.0:$PORT --workers 1 --threads 4`. Keep a single worker so the 1-request-per-second MusicBrainz limit holds.
+
 ## How a pairing is made
 
 All of this lives in `drinkify/matcher.py`.
